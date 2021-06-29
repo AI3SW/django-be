@@ -1,33 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Django Display Images</title>
+  <title>Style Transfer Demo</title>
   <meta charset="utf-8">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container">
-<!-- <table class="table table-striped">
+<table class="table table-striped">
     <thead>
       <tr>
 		<th>Title</th>
-		<th>Image</th>
+		<th>Reference Image</th>
       </tr>
     </thead>
     <tbody>
-	{% for img in images %}  
+	  {% for ref in references %}  
       <tr>
-        <td>{{img.title}}</td>
+        <td>{{ref.title}}</td>
         {% load static %}
-		<td><img src="/% static 'styletransfer/1.jpg' %/" width="120"/></td>
+		    <td><img src="{% static ref.path %}" width="120"/></td>
       </tr>
 	  {% endfor %} 
 	</tbody>
 </table>	
-</div> -->
-<body>
-    {% load static %}
-    <img src="{% static 'styletransfer/4.jpg' %}" alt="My image"/>
-</body>
+</div>
+
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" name="btn" value="Upload">
+ </form>
+
+ <img src="data:image/png;base64,{{result}}" width="200"/> 
+
 </body>
 </html>
