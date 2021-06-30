@@ -20,6 +20,10 @@ dirname = pathlib.Path(__file__).resolve().parent
 #predictionURL = "https://7cc1981e-f1fd-4e64-9836-03183317add0.mock.pstmn.io"
 predictionURL = "http://10.2.117.32:5000"
 
+#hardcode gender info first TBC move to db
+gender_info = {'1':'female', '2':'male', '3':'female', '4':'female'}
+ref_src_reverse = ['1']
+
 # Create your views here.
 
 def index(request):
@@ -40,14 +44,18 @@ def get_style(request):
     return HttpResponse(response, content_type='application/json'
                                 ,status=200)
 
-def predict_using_local(request, sid, rid):
+def predict_using_local(request, sid, style_id):
     sourcepath = str(dirname.parent) + "/resource/"
     src_path = sourcepath + "/src/"
     ref_path = sourcepath + "/ref/"
 
-    src = getBase64stringforImage(src_path + str(sid) +".jpg")
-    ref = getBase64stringforImage(ref_path + str(rid) +".jpg")
-    msg = {'src_img': src, 'ref_img': ref, 'ref_class': 'female', 'align_face': False}
+    src_img = getBase64stringforImage(src_path + str(sid) +".jpg")
+    ref = getBase64stringforImage(ref_path + str(style_id) +".jpg")
+
+    if str(style_id) in ref_src_reverse:
+        src_img, ref = ref, src_img
+
+    msg = {'src_img': src_img, 'ref_img': ref, 'ref_class': gender_info[str(style_id)], 'align_face': True}
     #print(msg)
     json_data = json.dumps(msg)
     headers = {'content-type': 'application/json'}
@@ -65,13 +73,16 @@ def predict_using_local(request, sid, rid):
 def predict(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        session_id, input_img, style_id = data['session_id'], data['img'], data['style_id']
+        session_id, src_img, style_id = data['session_id'], data['img'], data['style_id']
 
         ref_path = str(dirname) + "/static/styletransfer/" + str(style_id) + ".jpg"
         ref = getBase64stringforImage(ref_path)
 
-        msg = {'src_img': input_img, 'ref_img': ref, 'ref_class': 'female', 'align_face': False}
+        if str(style_id) in ref_src_reverse:
+            src_img, ref = ref, src_img
 
+        msg = {'src_img': src_img, 'ref_img': ref, 'ref_class': gender_info[str(style_id)], 'align_face': True}
+        #print(msg)
         json_data = json.dumps(msg)
         headers = {'content-type': 'application/json'}
 
@@ -100,17 +111,21 @@ def predict_demo(request):
         form = SrcImgForm(request.POST, request.FILES)
 
         if form.is_valid():
-            src_img = form.cleaned_data['src_img']
-            print(type(src_img.file))
-            img_bytes = base64.b64encode(src_img.file.getvalue())
-            img_str = img_bytes.decode("utf-8")
+            src = form.cleaned_data['src_img']
+            #print(type(src_img.file))
+            img_bytes = base64.b64encode(src.file.getvalue())
+            src_img = img_bytes.decode("utf-8")
             # return redirect('success')
 
-            rid = form.cleaned_data['selection']
+            style_id = form.cleaned_data['selection']
 
             ref_path = str(dirname) + "/static/styletransfer/"
-            ref = getBase64stringforImage(ref_path + str(rid) +".jpg")
-            msg = {'src_img': img_str, 'ref_img': ref, 'ref_class': 'female', 'align_face': False}
+            ref = getBase64stringforImage(ref_path + str(style_id) +".jpg")
+
+            if str(style_id) in ref_src_reverse:
+                src_img, ref = ref, src_img
+
+            msg = {'src_img': src_img, 'ref_img': ref, 'ref_class': gender_info[str(style_id)], 'align_face': True}
 
             json_data = json.dumps(msg)
             headers = {'content-type': 'application/json'}
@@ -134,7 +149,8 @@ def predict_demo(request):
         if file.endswith(".jpg"):
             item = {'title':file, 'path':'styletransfer/'+file}
             references.append(item)
-
+    
+    #print(references)
     return render(request, 'styletransfer/predict.html', {'references':references, 'form':form, 'result':result})
 
 def getBase64stringforImage(img):

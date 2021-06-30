@@ -26,8 +26,8 @@ class SrcImgForm(forms.Form):
             CHOICES.append((cnt, int(file.split('.')[0])))
             cnt += 1
 
-    src_img = forms.ImageField(label='src-img')
-    selection = forms.ChoiceField(label='select reference', choices=CHOICES)
+    src_img = forms.ImageField(label='Source Image')
+    selection = forms.ChoiceField(label='Select Reference', choices=CHOICES)
 
 # class RefForm(forms.Form):
 #     id = forms.CharField()
