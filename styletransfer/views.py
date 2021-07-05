@@ -12,6 +12,7 @@ from PIL import Image
 from io import BytesIO
 
 from .forms import *
+from .utils import *
 
 import pathlib
 
@@ -152,10 +153,3 @@ def predict_demo(request):
     
     #print(references)
     return render(request, 'styletransfer/predict.html', {'references':references, 'form':form, 'result':result})
-
-def getBase64stringforImage(img):
-    with Image.open(img) as image_file:
-        buffered = BytesIO()
-        image_file.save(buffered, format="JPEG")
-        image_bytes = base64.b64encode(buffered.getvalue())
-        return image_bytes.decode("utf-8")

@@ -27,3 +27,11 @@ def bounding_box(original_width, original_height, box):
 
     # (left, top, right, bottom)
     return (left, top, right, bottom)
+
+
+def getBase64stringforImage(img):
+    with Image.open(img) as image_file:
+        buffered = BytesIO()
+        image_file.save(buffered, format="JPEG")
+        image_bytes = base64.b64encode(buffered.getvalue())
+        return image_bytes.decode("utf-8")
