@@ -20,7 +20,7 @@ dirname = pathlib.Path(__file__).resolve().parent
 #predictionURL = "https://7cc1981e-f1fd-4e64-9836-03183317add0.mock.pstmn.io"
 predictionURL = "http://10.2.117.32:5000"
 
-#hardcode gender info first TBC move to db
+#hardcode info first TBC move to db
 gender_info = {'1':'female', '2':'male', '3':'female', '4':'female'}
 ref_src_reverse = ['1']
 

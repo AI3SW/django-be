@@ -76,17 +76,18 @@ WSGI_APPLICATION = 'mentalwellness.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # },
+    #postgres
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    },
-    'postgres': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '',
-        'USER': '<db_username>',
-        'PASSWORD': '<password>',
-        'HOST': '<db_hostname_or_ip>',
-        'PORT': '<db_port>',
+        'NAME': 'mentalwellness',
+        'USER': 'eric',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
