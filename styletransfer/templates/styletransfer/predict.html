@@ -26,13 +26,23 @@
 </table>	
 </div>
 
-<form method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="submit" name="btn" value="Upload">
- </form>
 
- <img src="data:image/png;base64,{{result}}" width="200"/> 
+<div class="container">
+  <table class="table table-striped">
+      <tbody>
+        <tr>
+          <td>
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <input type="submit" name="btn" value="Upload">
+             </form>
+          </td>
+          <td><img src="data:image/png;base64,{{result}}" width="200"/></td>
+        </tr>
+    </tbody>
+  </table>	
+  </div>
 
 </body>
 </html>
