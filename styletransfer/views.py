@@ -1,7 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 
 import glob, os
 import base64
@@ -13,6 +14,7 @@ from io import BytesIO
 
 from .forms import *
 from .utils import *
+from .models import *
 
 import pathlib
 
@@ -24,6 +26,7 @@ predictionURL = "http://10.2.117.32:5000"
 #hardcode info first TBC move to db
 gender_info = {'1':'female', '2':'male', '3':'female', '4':'female'}
 ref_src_reverse = ['1']
+connect_to_db = False
 
 # Create your views here.
 
@@ -37,7 +40,7 @@ def get_style(request):
 
     for file in os.listdir(ref_path):
         if file.endswith(".jpg"):
-            img_str = getBase64stringforImage(ref_path+'/'+file)
+            img_str = image_to_base64(ref_path+'/'+file)
             item = {'style_id':int(file.split('.')[0]), 'style_img':img_str}
             styles.append(item)
     
@@ -46,12 +49,12 @@ def get_style(request):
                                 ,status=200)
 
 def predict_using_local(request, sid, style_id):
-    sourcepath = str(dirname.parent) + "/resource/"
+    sourcepath = str(dirname) + "/resource/"
     src_path = sourcepath + "/src/"
     ref_path = sourcepath + "/ref/"
 
-    src_img = getBase64stringforImage(src_path + str(sid) +".jpg")
-    ref = getBase64stringforImage(ref_path + str(style_id) +".jpg")
+    src_img = image_to_base64(src_path + str(sid) +".jpg")
+    ref = image_to_base64(ref_path + str(style_id) +".jpg")
 
     if str(style_id) in ref_src_reverse:
         src_img, ref = ref, src_img
@@ -76,10 +79,16 @@ def predict(request):
         data = json.loads(request.body)
         session_id, src_img, style_id = data['session_id'], data['img'], data['style_id']
 
-        ref_path = str(dirname) + "/static/styletransfer/" + str(style_id) + ".jpg"
-        ref = getBase64stringforImage(ref_path)
+        # ref_path = str(dirname) + "/static/styletransfer/" + str(style_id) + ".jpg"
+        # ref = image_to_base64(ref_path)
 
-        if str(style_id) in ref_src_reverse:
+        # if str(style_id) in ref_src_reverse:
+        #     src_img, ref = ref, src_img
+
+        style_img = get_object_or_404(StyleImg, pk=int(style_id))
+        ref = image_to_base64(style_img.file_path)
+
+        if not style_img.is_ref:
             src_img, ref = ref, src_img
 
         msg = {'src_img': src_img, 'ref_img': ref, 'ref_class': gender_info[str(style_id)], 'align_face': True}
@@ -87,21 +96,22 @@ def predict(request):
         json_data = json.dumps(msg)
         headers = {'content-type': 'application/json'}
 
-        try:
-            r = requests.post(url = predictionURL + '/predict', data = json_data, headers = headers)
+        with requests.Session() as s:
+            try:
+                r = s.post(url = predictionURL + '/predict', data = json_data, headers = headers)
 
-            pic = BytesIO()
-            image_string = r.json()['output_img']
-            
-            response = json.dumps({"output_img": image_string})
+                pic = BytesIO()
+                image_string = r.json()['output_img']
+                
+                response = json.dumps({"output_img": image_string})
 
-            return HttpResponse(response, content_type='application/json'
-                                ,status=200)
-        except Exception as e:
-            print(e)
-            error = json.dumps({"Error": str(e)})
-            return HttpResponse(error, content_type='application/json'
-                                ,status=503)
+                return HttpResponse(response, content_type='application/json'
+                                    ,status=200)
+            except Exception as e:
+                print(e)
+                error = json.dumps({"Error": str(e)})
+                return HttpResponse(error, content_type='application/json'
+                                    ,status=503)
 
 @csrf_exempt
 def predict_demo(request):
@@ -120,10 +130,10 @@ def predict_demo(request):
 
             style_id = form.cleaned_data['selection']
 
-            ref_path = str(dirname) + "/static/styletransfer/"
-            ref = getBase64stringforImage(ref_path + str(style_id) +".jpg")
+            style_img = get_object_or_404(StyleImg, pk=int(style_id))
+            ref = image_to_base64(style_img.file_path)
 
-            if str(style_id) in ref_src_reverse:
+            if not style_img.is_ref:
                 src_img, ref = ref, src_img
 
             msg = {'src_img': src_img, 'ref_img': ref, 'ref_class': gender_info[str(style_id)], 'align_face': True}
@@ -131,14 +141,15 @@ def predict_demo(request):
             json_data = json.dumps(msg)
             headers = {'content-type': 'application/json'}
 
-            try:
-                r = requests.post(url = predictionURL + '/predict', data = json_data, headers = headers)
-                image_string = r.json()['output_img']
-                result = image_string
-                # response = json.dumps({"output_img": image_string})
+            with requests.Session() as s:
+                try:
+                    r = s.post(url = predictionURL + '/predict', data = json_data, headers = headers)
+                    image_string = r.json()['output_img']
+                    result = image_string
+                    # response = json.dumps({"output_img": image_string})
 
-            except Exception as e:
-                print(e)
+                except Exception as e:
+                    print(e)
 
     else:
         form = SrcImgForm()

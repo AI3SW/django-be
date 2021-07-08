@@ -1,4 +1,9 @@
 from PIL import Image  # to read images
+import base64
+
+from PIL import Image
+from io import BytesIO
+import re
 
 
 def cropImageTargetCoordinate(root_img, box):
@@ -29,9 +34,18 @@ def bounding_box(original_width, original_height, box):
     return (left, top, right, bottom)
 
 
-def getBase64stringforImage(img):
+def image_to_base64(img):
     with Image.open(img) as image_file:
         buffered = BytesIO()
         image_file.save(buffered, format="JPEG")
         image_bytes = base64.b64encode(buffered.getvalue())
         return image_bytes.decode("utf-8")
+
+def base64_to_image(base64_str, image_path=None):
+    base64_data = re.sub('^data:image/.+;base64,', '', base64_str)
+    byte_data = base64.b64decode(base64_data)
+    image_data = BytesIO(byte_data)
+    img = Image.open(image_data)
+    if image_path:
+        img.save(image_path)
+    return img

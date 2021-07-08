@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['10.2.119.9', '127.0.0.1']
 
 INSTALLED_APPS = [
     'styletransfer.apps.StyletransferConfig',
+    'polls.apps.PollsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -88,6 +89,15 @@ DATABASES = {
         'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '',
+    },
+
+    'postgres2': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'ai_3_staging',
+        'USER': 'postgres',
+        'PASSWORD': 'password',
+        'HOST': '10.2.117.32',
+        'PORT': '5432',
     }
 }
 
