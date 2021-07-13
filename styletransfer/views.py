@@ -4,6 +4,8 @@ from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.utils import timezone
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.files.base import ContentFile
 
 import glob, os
 import base64
@@ -55,11 +57,9 @@ def predict(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         session_id, raw_src_img, style_id = data['session_id'], data['img'], data['style_id']
-
+        
         if connect_to_db:
-            src = base64_to_image(raw_src_img)
-            new_src_img = InputImg(file_path = src, create_date = timezone.now())
-            new_src_img.save()
+            storeImageIntoDB(InputImg, raw_src_img)
 
         style_img = get_object_or_404(StyleImg, pk=int(style_id))
         ref = image_to_base64(style_img.file_path)
@@ -78,6 +78,9 @@ def predict(request):
 
                 pic = BytesIO()
                 image_string = r.json()['output_img']
+
+                if connect_to_db:
+                    storeImageIntoDB(OutputImg, image_string)
                 
                 response = json.dumps({"output_img": image_string})
 
@@ -128,7 +131,9 @@ def predict_stargan_demo(request):
                     r = s.post(url = predictionURL + '/predict', data = json_data, headers = headers)
                     image_string = r.json()['output_img']
                     result = image_string
-                    # response = json.dumps({"output_img": image_string})
+
+                    if connect_to_db:
+                        storeImageIntoDB(OutputImg, image_string)
 
                 except Exception as e:
                     print('Error: ', e)
@@ -181,6 +186,9 @@ def predict_simswap_demo(request):
                     image_string = r.json()['output_img']
                     result = image_string
                     # response = json.dumps({"output_img": image_string})
+
+                    if connect_to_db:
+                        storeImageIntoDB(OutputImg, image_string)
 
                 except Exception as e:
                     print('Error: ', e)

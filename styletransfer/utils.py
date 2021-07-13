@@ -5,6 +5,9 @@ from PIL import Image
 from io import BytesIO
 import re
 
+from django.conf import settings
+from django.utils import timezone
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 def cropImageTargetCoordinate(root_img, box):
 
@@ -49,3 +52,18 @@ def base64_to_image(base64_str, image_path=None):
     if image_path:
         img.save(image_path)
     return img
+
+
+def storeImageIntoDB(selectedModel, raw_img, img_format = 'JPEG'):
+                        
+    new_img = selectedModel()
+    pil_img = base64_to_image(raw_img)
+    img_io = BytesIO()
+    pil_img.save(img_io, format = img_format)
+
+    cur_time = str(timezone.now()).split('.')[0]
+    new_img.file_path = InMemoryUploadedFile(img_io, field_name=None, name = cur_time + '.jpg', 
+        content_type='image/jpeg', size=img_io.tell, charset=None)
+
+    new_img.create_date = timezone.now()
+    new_img.save()

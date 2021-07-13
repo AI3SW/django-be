@@ -279,5 +279,8 @@ coverage.xml
 *.log
 *.pot
 
+*.jpg
+*.png
+
 # Sphinx documentation
 docs/_build/
