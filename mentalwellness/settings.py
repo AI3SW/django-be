@@ -91,14 +91,14 @@ DATABASES = {
         'PORT': '',
     },
 
-    'postgres2': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ai_3_staging',
-        'USER': 'postgres',
-        'PASSWORD': 'password',
-        'HOST': '10.2.117.32',
-        'PORT': '5432',
-    }
+    # 'postgres2': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'ai_3_staging',
+    #     'USER': 'postgres',
+    #     'PASSWORD': 'password',
+    #     'HOST': '10.2.117.32',
+    #     'PORT': '5432',
+    # }
 }
 
 

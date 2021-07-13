@@ -18,8 +18,7 @@
 	  {% for ref in references %}  
       <tr>
         <td>{{ref.title}}</td>
-        {% load static %}
-		    <td><img src="{% static ref.path %}" width="120"/></td>
+		    <td><img src="{{ ref.path.url }}" width="120"/></td>
       </tr>
 	  {% endfor %} 
 	</tbody>

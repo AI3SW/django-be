@@ -9,8 +9,8 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('style', views.get_style, name='get_style'),
     path('predict', views.predict, name='predict'),
-    path('predict/demo', views.predict_demo, name='predict_demo'),
-    path('predict/source/<int:sid>/reference/<int:style_id>', views.predict_using_local, name='predict_using_local'),
+    path('predict/stargan/demo', views.predict_stargan_demo, name='predict_stargan_demo'),
+    path('predict/simswap/demo', views.predict_simswap_demo, name='predict_simswap_demo'),
 ]
 
 if settings.DEBUG:
