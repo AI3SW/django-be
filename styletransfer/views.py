@@ -27,10 +27,8 @@ dirname = pathlib.Path(__file__).resolve().parent
 predictionURL = "http://10.2.117.32:5000"
 simswapURL = "http://10.2.117.32:5001"
 
-#hardcode info first TBC move to db
-# gender_info = {'1':'female', '2':'male', '3':'female', '4':'female'}
-# ref_src_reverse = ['1']
-connect_to_db = True
+# if need to connect to db
+connect_to_db = False
 
 # Create your views here.
 
@@ -38,16 +36,19 @@ def index(request):
     return HttpResponse("Hello, this is index.")
 
 def get_style(request):
-
-    ref_path = str(dirname) + "/static/styletransfer"
     styles = []
 
-    for file in os.listdir(ref_path):
-        if file.endswith(".jpg"):
-            img_str = image_to_base64(ref_path+'/'+file)
-            item = {'style_id':int(file.split('.')[0]), 'style_img':img_str}
-            styles.append(item)
-    
+    style_list = StyleImg.objects.all()
+
+    for style_img in style_list:
+
+        item = {}
+        item['style_id'] = style_img.id
+        item['style_img'] = image_to_base64(style_img.file_path)
+        item['style_name'] = style_img.image_name()
+        item['model'] = style_img.image_model()
+        styles.append(item)
+
     response = json.dumps({"styles":styles})
     return HttpResponse(response, content_type='application/json'
                                 ,status=200)
@@ -66,15 +67,30 @@ def predict(request):
 
         if not style_img.is_ref:
             raw_src_img, ref = ref, raw_src_img
+        
+        if style_img.image_model() == 'stargan':
+            msg = {'src_img': raw_src_img, 'ref_img': ref, 'ref_class': style_img.ref_class, 'align_face': True}
+            targetURL = predictionURL
 
-        msg = {'src_img': raw_src_img, 'ref_img': ref, 'ref_class': style_img.ref_class, 'align_face': True}
+        elif style_img.image_model() == 'simswap':
+            msg = {'src_img': raw_src_img, 'ref_img': ref}
+            targetURL = simswapURL
+        
+        else:
+            
+            e = "Unsupported model"
+            error = json.dumps({"Error": str(e)})
+                
+            return HttpResponse(error, content_type='application/json'
+                                ,status=503)
+
         #print(msg)
         json_data = json.dumps(msg)
         headers = {'content-type': 'application/json'}
 
         with requests.Session() as s:
             try:
-                r = s.post(url = predictionURL + '/predict', data = json_data, headers = headers)
+                r = s.post(url = targetURL + '/predict', data = json_data, headers = headers)
 
                 pic = BytesIO()
                 image_string = r.json()['output_img']
@@ -89,6 +105,7 @@ def predict(request):
             except Exception as e:
                 print(e)
                 error = json.dumps({"Error": str(e)})
+
                 return HttpResponse(error, content_type='application/json'
                                     ,status=503)
 

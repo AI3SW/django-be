@@ -26,3 +26,20 @@ class Result(models.Model):
 
     def __str__(self) -> str:
         return self.session_id
+
+class User(models.Model):
+    name = models.CharField(max_length=200)
+    email = models.CharField(max_length=200)
+
+    def __str__(self) -> str:
+        return self.name
+
+class Session(models.Model):
+    uid = models.CharField(max_length=200)
+    start_time = models.DateTimeField('start time')
+    end_time = models.DateTimeField('end time')
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.uid
+

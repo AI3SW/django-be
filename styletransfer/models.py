@@ -43,6 +43,9 @@ class StyleImg(models.Model):
     def image_name(self):
         return os.path.basename(self.file_path.name).split('.')[0]
     
+    def image_model(self):
+        return self.model.name
+    
     def __str__(self) -> str:
         return os.path.basename(self.file_path.name)
 
