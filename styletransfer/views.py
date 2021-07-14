@@ -77,7 +77,7 @@ def predict(request):
             targetURL = simswapURL
         
         else:
-            
+
             e = "Unsupported model"
             error = json.dumps({"Error": str(e)})
                 
@@ -129,9 +129,9 @@ def predict_stargan_demo(request):
             src_img = img_bytes.decode("utf-8")
             # return redirect('success')
 
-            style_id = form.cleaned_data['selection']
+            style_img = form.cleaned_data['selection']
 
-            style_img = get_object_or_404(StyleImg, pk=int(style_id))
+            #style_img = get_object_or_404(StyleImg, pk=int(style_id))
             #style_img = get_object_or_404(StyleImg, image_name = style_name, pk=1)
             ref = image_to_base64(style_img.file_path)
 
@@ -161,8 +161,9 @@ def predict_stargan_demo(request):
     references = []
 
     style_img_list = StyleImg.objects.all().filter(model__name = 'stargan')
-
+    
     for style_img in style_img_list:
+        # print('title: ', style_img.image_name)
         item = {'title':style_img.image_name, 'path':style_img.file_path}
         references.append(item)
 
@@ -185,8 +186,8 @@ def predict_simswap_demo(request):
             img_bytes = base64.b64encode(src.file.getvalue())
             src_img = img_bytes.decode("utf-8")
 
-            style_id = form.cleaned_data['selection']
-            style_img = get_object_or_404(StyleImg, pk=int(style_id))
+            style_img = form.cleaned_data['selection']
+            #style_img = get_object_or_404(StyleImg, pk=int(style_id))
             ref = image_to_base64(style_img.file_path)
 
             if not style_img.is_ref:

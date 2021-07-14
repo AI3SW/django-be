@@ -11,6 +11,8 @@ urlpatterns = [
     path('predict', views.predict, name='predict'),
     path('predict/stargan/demo', views.predict_stargan_demo, name='predict_stargan_demo'),
     path('predict/simswap/demo', views.predict_simswap_demo, name='predict_simswap_demo'),
+
+    #path('predict/all/demo', views.predict_all_demo, name='predict_all_demo'),
 ]
 
 if settings.DEBUG:

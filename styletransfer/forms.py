@@ -1,6 +1,6 @@
 from django import forms
 from django.db.models.enums import Choices
-from django.forms import fields
+from django.forms import fields, ModelChoiceField
 from django.conf import settings
 from django.conf.urls.static import static
 from .models import *
@@ -16,20 +16,26 @@ dirname = pathlib.Path(__file__).resolve().parent
 #         model = SrcImg
 #         fields = ['src_img']
 
+class StyleImgChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.image_name()
+
 class SrcImgForm(forms.Form):
 
     #ref_path = str(dirname) + "/static/styletransfer"
-    CHOICES = []
+    # CHOICES = []
     
-    style_img_list = StyleImg.objects.all().filter(model__name = 'stargan')
+    # style_img_list = StyleImg.objects.all().filter(model__name = 'stargan')
 
-    for style_img in style_img_list:
-        # print(style_img.image_name(), style_img.model, type(style_img.model))
-        CHOICES.append(( style_img.id, style_img.image_name() ))
+    # for style_img in style_img_list:
+    #     # print(style_img.image_name(), style_img.model, type(style_img.model))
+    #     CHOICES.append(( style_img.id, style_img.image_name() ))
     
     # print(CHOICES)
     src_img = forms.ImageField(label='Source Image')
-    selection = forms.ChoiceField(label='Select Reference', choices=CHOICES)
+    #selection = forms.ChoiceField(label='Select Reference', choices=CHOICES)
+    #selection = forms.ModelChoiceField(queryset = StyleImg.objects.all().filter(model__name = 'stargan') )
+    selection = StyleImgChoiceField(queryset = StyleImg.objects.all().filter(model__name = 'stargan') )
 
     class Meta:
         model = InputImg
@@ -40,13 +46,13 @@ class SimSwapForm(forms.Form):
 
     CHOICES = []
     
-    style_img_list = StyleImg.objects.all().filter(model__name = 'simswap')
+    # style_img_list = StyleImg.objects.all().filter(model__name = 'simswap')
 
-    for style_img in style_img_list:
-        CHOICES.append(( style_img.id, style_img.image_name() ))
+    # for style_img in style_img_list:
+    #     CHOICES.append(( style_img.id, style_img.image_name() ))
     
     src_img = forms.ImageField(label='Source Image')
-    selection = forms.ChoiceField(label='Select Reference', choices=CHOICES)
+    selection = StyleImgChoiceField(queryset = StyleImg.objects.all().filter(model__name = 'simswap') )
 
     class Meta:
         model = InputImg
