@@ -37,6 +37,7 @@ class StyleImg(models.Model):
     #file_path = models.CharField(max_length=125, blank=True, null=True)
     file_path = models.ImageField(upload_to='images/style/')
     model = models.ForeignKey('Model', models.DO_NOTHING, blank=True, null=True)
+    theme = models.ForeignKey('Theme', models.DO_NOTHING, blank=True, null=True)
     is_ref = models.BooleanField(blank=True, null=True)
     ref_class = models.CharField(max_length=10, blank=True, null=True)
 
@@ -45,6 +46,9 @@ class StyleImg(models.Model):
     
     def image_model(self):
         return self.model.name
+    
+    def image_theme(self):
+        return self.theme.name
     
     def __str__(self) -> str:
         return os.path.basename(self.file_path.name)
@@ -67,7 +71,7 @@ class OutputImg(models.Model):
 
 class Model(models.Model):
     #file_path = models.CharField(max_length=125, blank=True, null=True)
-    name = models.CharField(max_length=15, blank=True, null=True)
+    name = models.CharField(max_length=125, blank=True, null=True)
     
     def __str__(self) -> str:
         return self.name
@@ -75,3 +79,14 @@ class Model(models.Model):
     class Meta:
         managed = True
         db_table = 'model'
+
+class Theme(models.Model):
+    #file_path = models.CharField(max_length=125, blank=True, null=True)
+    name = models.CharField(max_length=125, blank=True, null=True)
+    
+    def __str__(self) -> str:
+        return self.name
+    
+    class Meta:
+        managed = True
+        db_table = 'theme'

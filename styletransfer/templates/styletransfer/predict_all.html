@@ -12,13 +12,15 @@
       <tr>
 		<th>Theme</th>
 		<th>Reference Image</th>
+        <th>Supported Model</th>
       </tr>
     </thead>
     <tbody>
 	  {% for ref in references %}  
       <tr>
         <td>{{ref.title}}</td>
-		    <td><img src="{{ ref.path.url }}" width="120"/></td>
+		<td><img src="{{ ref.path.url }}" width="120"/></td>
+        <td>{{ref.models}}</td>
       </tr>
 	  {% endfor %} 
 	</tbody>
@@ -37,11 +39,24 @@
               <input type="submit" name="btn" value="Upload">
              </form>
           </td>
-          <td><img src="data:image/png;base64,{{result}}" width="200"/></td>
+          <!-- <td><img src="data:image/png;base64,{{result}}" width="200"/></td> -->
         </tr>
     </tbody>
   </table>	
   </div>
+
+<div class="container">
+<table class="table table-striped">
+    <tbody>
+    {% for res in result %}  
+    <tr>
+        <td>{{res.model}}</td>
+        <td><img src="data:image/png;base64,{{res.img}}" width="120"/></td>
+    </tr>
+    {% endfor %} 
+    </tbody>
+</table>	
+</div>
 
 </body>
 </html>

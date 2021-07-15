@@ -45,7 +45,7 @@ def get_style(request):
         item = {}
         item['style_id'] = style_img.id
         item['style_img'] = image_to_base64(style_img.file_path)
-        item['style_name'] = style_img.image_name()
+        item['style_theme'] = style_img.image_theme()
         item['model'] = style_img.image_model()
         styles.append(item)
 
@@ -164,7 +164,7 @@ def predict_stargan_demo(request):
     
     for style_img in style_img_list:
         # print('title: ', style_img.image_name)
-        item = {'title':style_img.image_name, 'path':style_img.file_path}
+        item = {'title':style_img.image_theme(), 'path':style_img.file_path}
         references.append(item)
 
     return render(request, 'styletransfer/predict.html', {'references':references, 'form':form, 'result':result})
@@ -219,7 +219,80 @@ def predict_simswap_demo(request):
     style_img_list = StyleImg.objects.all().filter(model__name = 'simswap')
 
     for style_img in style_img_list:
-        item = {'title':style_img.image_name, 'path':style_img.file_path}
+        item = {'title':style_img.image_theme(), 'path':style_img.file_path}
         references.append(item)
 
     return render(request, 'styletransfer/predict.html', {'references':references, 'form':form, 'result':result})
+
+
+@csrf_exempt
+def predict_all_demo(request):
+    result = []
+
+    if request.method == 'POST':
+        form = AllTransferForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            src = form.cleaned_data['src_img']
+
+            if connect_to_db:
+                new_src_img = InputImg(file_path = src, create_date = timezone.now())
+                new_src_img.save()
+
+            img_bytes = base64.b64encode(src.file.getvalue())
+            src_img = img_bytes.decode("utf-8")
+
+            theme = form.cleaned_data['selection']
+            #style_img = get_object_or_404(StyleImg, pk=int(style_id))
+            ref_list = StyleImg.objects.all().filter(theme = theme)
+
+            for style_img in ref_list:
+                ref = image_to_base64(style_img.file_path)
+
+                if not style_img.is_ref:
+                    src_img, ref = ref, src_img
+                
+                if style_img.image_model() == 'stargan':
+                    msg = {'src_img': src_img, 'ref_img': ref, 'ref_class': style_img.ref_class, 'align_face': True}
+                    targetURL = predictionURL
+
+                elif style_img.image_model() == 'simswap':
+                    msg = {'src_img': src_img, 'ref_img': ref}
+                    targetURL = simswapURL
+                
+                else:
+                    e = "Unsupported model"
+                    print('Error: ', e)
+                    continue
+
+                json_data = json.dumps(msg)
+                headers = {'content-type': 'application/json'}
+
+                with requests.Session() as s:
+                    try:
+                        r = s.post(url = targetURL + '/predict', data = json_data, headers = headers)
+                        image_string = r.json()['output_img']
+                        result.append({'model':style_img.image_model(), 'img': image_string})
+                        # response = json.dumps({"output_img": image_string})
+
+                        if connect_to_db:
+                            storeImageIntoDB(OutputImg, image_string)
+
+                    except Exception as e:
+                        print('Error: ', e)
+
+    else:
+        form = AllTransferForm()
+    
+    references = []
+
+    style_img_list = StyleImg.objects.all().distinct('theme__name')
+
+    for style_img in style_img_list:
+        cur_theme = Theme.objects.get(name = style_img.image_theme())
+        models_list = StyleImg.objects.all().filter(theme=cur_theme.id).values_list('model__name', flat=True)
+        models = ', '.join(sorted(list(models_list)))
+        item = {'title':style_img.image_theme, 'path':style_img.file_path, 'models': models}
+        references.append(item)
+
+    return render(request, 'styletransfer/predict_all.html', {'references':references, 'form':form, 'result':result})
