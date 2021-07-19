@@ -282,6 +282,7 @@ coverage.xml
 
 *.jpg
 *.png
+*.pyc
 
 # Sphinx documentation
 docs/_build/
