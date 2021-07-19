@@ -19,10 +19,6 @@ import pathlib
 
 dirname = pathlib.Path(__file__).resolve().parent
 
-#predictionURL = "https://7cc1981e-f1fd-4e64-9836-03183317add0.mock.pstmn.io"
-# predictionURL = "http://10.2.117.32:5000"
-# simswapURL = "http://10.2.117.32:5001"
-
 # if need to connect to db
 connect_to_db = settings.CONNECT_TO_DB
 

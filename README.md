@@ -24,18 +24,18 @@ $ conda activate django-mw
 
 1. Update `DATABASES` in [`settings.py`](mentalwellness/settings.py) with target setting for all databases:
 
-    * `'ENGINE': database backend to use`
-    * `'NAME': The name of the database to use`
-    * `'USER': The username to use when connecting to the database`
-    * `'PASSWORD': The password to use when connecting to the database`
-    * `'HOST': Which host to use when connecting to the database`
-    * `'PORT': The port to use when connecting to the database`
+    * `'ENGINE'`: database backend to use
+    * `'NAME'`: The name of the database to use
+    * `'USER'`: The username to use when connecting to the database
+    * `'PASSWORD'`: The password to use when connecting to the database
+    * `'HOST'`: Which host to use when connecting to the database
+    * `'PORT'`: The port to use when connecting to the database
 
 1. Update `PREDICTION_MODEL_URL` in [`settings.py`](mentalwellness/settings.py) for AI models destination:
 
-    * `'HOST': Which host to use when connecting to AI`
-    * `'PORT': The port to use when connecting to AI`
-    * `'ENDPOINT': The name of the endpoint to use`
+    * `'HOST'`: Which host to use when connecting to AI
+    * `'PORT'`: The port to use when connecting to AI
+    * `'ENDPOINT'`: The name of the endpoint to use
 
 1. Update `CONNECT_TO_DB` for input and output image database storage control
 
@@ -43,7 +43,7 @@ $ conda activate django-mw
 
 ## Start Running
 
-### Start Django server application
+### Start Django Server
 
 ```sh
 $ # To make your development server viewable to other machines on the network, use its own IP address (e.g. 10.2.119.9) or 0.0.0.0
@@ -63,7 +63,7 @@ Quit the server with CONTROL-C
 
 Go to http://localhost:8000/ in your browser, and you should see the text `“Hello, this is index.”`
 
-### Activating models
+### Activate models
 
 1. Create migration for styletransfer
     ```
@@ -107,9 +107,36 @@ Go to http://localhost:8000/ in your browser, and you should see the text `“He
     Applying polls.0001_initial... OK
     ```
 
-### Creating an admin user
+### Create an admin user
 
 Please fellow the instructions from this link: [creating-an-admin-user](https://docs.djangoproject.com/en/3.2/intro/tutorial02/#creating-an-admin-user)
+
+## Run Demo
+
+Serveral demo pages are avaliable for different AI models
+* [Stargan](http://127.0.0.1:8000/predict/stargan/demo)
+* [Simswap](http://127.0.0.1:8000/predict/simswap/demo)
+
+One page for all
+* [All models](http://127.0.0.1:8000/predict/all/demo)
+
+If you see an empty page when opening above link, you need to add styles before doing styletransfer
+### Add styles into Database
+
+1. visit django admin page [admin](http://127.0.0.1:8000/admin/) using admin account
+
+1. Go to `Styletransfer -> Style Img`
+
+1. Click `ADD STYLE IMG` on top right concer
+
+1. Fill up all required field
+    * `'File path'`: select and upload image from local directory
+    * `'Model'`: Target AI model to support
+    * `'Theme'`: Theme name for image
+    * `'Is ref'`: Whether will be used as reference image
+    * `'Ref class'`: class of reference image: `male` or `female`
+
+1. Click `Save` and refresh demo page
 
 ## Additional Details
 
