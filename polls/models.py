@@ -8,6 +8,10 @@ class Question(models.Model):
 
     def __str__(self) -> str:
         return self.question_text
+    
+    class Meta:
+        managed = True
+        db_table = 'question'
 
 
 class Option(models.Model):
@@ -17,6 +21,10 @@ class Option(models.Model):
 
     def __str__(self) -> str:
         return self.text
+    
+    class Meta:
+        managed = True
+        db_table = 'option'
 
 class Result(models.Model):
     session_id = models.CharField(max_length=20, blank=True, null=True)
@@ -27,12 +35,20 @@ class Result(models.Model):
     def __str__(self) -> str:
         return self.session_id
 
+    class Meta:
+        managed = True
+        db_table = 'result'
+
 class User(models.Model):
     name = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
 
     def __str__(self) -> str:
         return self.name
+    
+    class Meta:
+        managed = True
+        db_table = 'user'
 
 class Session(models.Model):
     uid = models.CharField(max_length=200)
@@ -42,4 +58,8 @@ class Session(models.Model):
 
     def __str__(self) -> str:
         return self.uid
+    
+    class Meta:
+        managed = True
+        db_table = 'session'
 
