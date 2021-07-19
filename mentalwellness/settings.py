@@ -76,6 +76,8 @@ WSGI_APPLICATION = 'mentalwellness.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+CONNECT_TO_DB = False
+
 DATABASES = {
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
@@ -150,3 +152,16 @@ STATICFILES_DIRS = (
 
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+PREDICTION_MODEL_URL = {
+    'stargan': {
+        'HOST': 'http://10.2.117.32',
+        'PORT': '5000',
+        'ENDPOINT': 'predict'
+    },
+    'simswap': {
+        'HOST': 'http://10.2.117.32',
+        'PORT': '5001',
+        'ENDPOINT': 'predict'
+    }
+}

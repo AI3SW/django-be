@@ -1,13 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
-from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.utils import timezone
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.core.files.base import ContentFile
 
-import glob, os
 import base64
 import json
 import requests
@@ -24,11 +20,11 @@ import pathlib
 dirname = pathlib.Path(__file__).resolve().parent
 
 #predictionURL = "https://7cc1981e-f1fd-4e64-9836-03183317add0.mock.pstmn.io"
-predictionURL = "http://10.2.117.32:5000"
-simswapURL = "http://10.2.117.32:5001"
+# predictionURL = "http://10.2.117.32:5000"
+# simswapURL = "http://10.2.117.32:5001"
 
 # if need to connect to db
-connect_to_db = False
+connect_to_db = settings.CONNECT_TO_DB
 
 # Create your views here.
 
@@ -70,14 +66,11 @@ def predict(request):
         
         if style_img.image_model() == 'stargan':
             msg = {'src_img': raw_src_img, 'ref_img': ref, 'ref_class': style_img.ref_class, 'align_face': True}
-            targetURL = predictionURL
 
         elif style_img.image_model() == 'simswap':
             msg = {'src_img': raw_src_img, 'ref_img': ref}
-            targetURL = simswapURL
         
         else:
-
             e = "Unsupported model"
             error = json.dumps({"Error": str(e)})
                 
@@ -88,9 +81,12 @@ def predict(request):
         json_data = json.dumps(msg)
         headers = {'content-type': 'application/json'}
 
+        dest = settings.PREDICTION_MODEL_URL[style_img.image_model()]
+        targetURL = dest['HOST'] + ':' + dest['PORT'] + '/' + dest['ENDPOINT']
+
         with requests.Session() as s:
             try:
-                r = s.post(url = targetURL + '/predict', data = json_data, headers = headers)
+                r = s.post(url = targetURL, data = json_data, headers = headers)
 
                 pic = BytesIO()
                 image_string = r.json()['output_img']
@@ -143,9 +139,12 @@ def predict_stargan_demo(request):
             json_data = json.dumps(msg)
             headers = {'content-type': 'application/json'}
 
+            dest = settings.PREDICTION_MODEL_URL[style_img.image_model()]
+            targetURL = dest['HOST'] + ':' + dest['PORT'] + '/' + dest['ENDPOINT']
+
             with requests.Session() as s:
                 try:
-                    r = s.post(url = predictionURL + '/predict', data = json_data, headers = headers)
+                    r = s.post(url = targetURL, data = json_data, headers = headers)
                     image_string = r.json()['output_img']
                     result = image_string
 
@@ -198,9 +197,12 @@ def predict_simswap_demo(request):
             json_data = json.dumps(msg)
             headers = {'content-type': 'application/json'}
 
+            dest = settings.PREDICTION_MODEL_URL[style_img.image_model()]
+            targetURL = dest['HOST'] + ':' + dest['PORT'] + '/' + dest['ENDPOINT']
+
             with requests.Session() as s:
                 try:
-                    r = s.post(url = simswapURL + '/predict', data = json_data, headers = headers)
+                    r = s.post(url = targetURL, data = json_data, headers = headers)
                     image_string = r.json()['output_img']
                     result = image_string
                     # response = json.dumps({"output_img": image_string})
@@ -254,11 +256,9 @@ def predict_all_demo(request):
                 
                 if style_img.image_model() == 'stargan':
                     msg = {'src_img': src_img, 'ref_img': ref, 'ref_class': style_img.ref_class, 'align_face': True}
-                    targetURL = predictionURL
 
                 elif style_img.image_model() == 'simswap':
                     msg = {'src_img': src_img, 'ref_img': ref}
-                    targetURL = simswapURL
                 
                 else:
                     e = "Unsupported model"
@@ -268,9 +268,12 @@ def predict_all_demo(request):
                 json_data = json.dumps(msg)
                 headers = {'content-type': 'application/json'}
 
+                dest = settings.PREDICTION_MODEL_URL[style_img.image_model()]
+                targetURL = dest['HOST'] + ':' + dest['PORT'] + '/' + dest['ENDPOINT']
+
                 with requests.Session() as s:
                     try:
-                        r = s.post(url = targetURL + '/predict', data = json_data, headers = headers)
+                        r = s.post(url = targetURL, data = json_data, headers = headers)
                         image_string = r.json()['output_img']
                         result.append({'model':style_img.image_model(), 'img': image_string})
                         # response = json.dumps({"output_img": image_string})

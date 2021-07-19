@@ -18,7 +18,7 @@ $ conda activate django-mw
 ```
 
 ## Before Running
-1. Setup correct database in desired location
+1. Setup database in desired destination
 
 1. Update `ALLOWED_HOSTS` in [`settings.py`](mentalwellness/settings.py) with all possible IPs Django site can serve:
 
@@ -31,9 +31,15 @@ $ conda activate django-mw
     * `'HOST': Which host to use when connecting to the database`
     * `'PORT': The port to use when connecting to the database`
 
-1. Create `media` directory in project folder
+1. Update `PREDICTION_MODEL_URL` in [`settings.py`](mentalwellness/settings.py) for AI models destination:
 
-1. Create `logs` directory in project folder for storage of log files
+    * `'HOST': Which host to use when connecting to AI`
+    * `'PORT': The port to use when connecting to AI`
+    * `'ENDPOINT': The name of the endpoint to use`
+
+1. Update `CONNECT_TO_DB` for input and output image database storage control
+
+1. Create `media` directory in project folder
 
 ## Start Running
 
@@ -103,10 +109,9 @@ Go to http://localhost:8000/ in your browser, and you should see the text `“He
 
 ### Creating an admin user
 
-Please fellow the instructions from this link:
-https://docs.djangoproject.com/en/3.2/intro/tutorial02/#creating-an-admin-user
+Please fellow the instructions from this link: [creating-an-admin-user](https://docs.djangoproject.com/en/3.2/intro/tutorial02/#creating-an-admin-user)
 
-## Introduction for components
+## Additional Details
 
 ### django-be.styletransfer
 * Application for Style Transfer model
