@@ -20,7 +20,8 @@ $ conda activate django-mw
 ## Before Running
 1. Setup database in desired destination
 
-1. Update `ALLOWED_HOSTS` in [`settings.py`](mentalwellness/settings.py) with all possible IPs Django site can serve:
+1. Update `ALLOWED_HOSTS` in [`settings.py`](mentalwellness/settings.py) with all host/domain names that this Django site can serve.
+    * Please refer to link [here](https://docs.djangoproject.com/en/3.2/ref/settings/#allowed-hosts) 
 
 1. Update `DATABASES` in [`settings.py`](mentalwellness/settings.py) with target setting for all databases:
     * Set your default database into `'default'` session
@@ -109,7 +110,7 @@ Go to http://localhost:8000/ in your browser, and you should see the text `“He
 
 ### Create an admin user
 
-Please fellow the instructions from this link: [creating-an-admin-user](https://docs.djangoproject.com/en/3.2/intro/tutorial02/#creating-an-admin-user)
+Please follow the instructions here: [creating-an-admin-user](https://docs.djangoproject.com/en/3.2/intro/tutorial02/#creating-an-admin-user)
 
 ## Run Demo
 
