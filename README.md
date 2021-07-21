@@ -23,7 +23,7 @@ $ conda activate django-mw
 1. Update `ALLOWED_HOSTS` in [`settings.py`](mentalwellness/settings.py) with all possible IPs Django site can serve:
 
 1. Update `DATABASES` in [`settings.py`](mentalwellness/settings.py) with target setting for all databases:
-
+    * Set your default database into `'default'` session
     * `'ENGINE'`: database backend to use
     * `'NAME'`: The name of the database to use
     * `'USER'`: The username to use when connecting to the database
