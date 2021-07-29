@@ -114,7 +114,7 @@ Please follow the instructions here: [creating-an-admin-user](https://docs.djang
 
 ### Provide initial style images for models
 
-Style images are saved in  [here](media/images/style). Run below command to insert them into database.
+Style images are saved in [here](media/images/style) and their attributes in [here](fixtures/styletransfer.json) . Run below command to insert them into database.
 
 <mark>!</mark> check default values and make sure other parts are aligned
 
