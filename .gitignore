@@ -240,7 +240,6 @@ __pycache__/
 
 # Distribution / packaging
 bin/
-media/
 build/
 develop-eggs/
 dist/
