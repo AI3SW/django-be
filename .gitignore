@@ -280,8 +280,6 @@ coverage.xml
 *.log
 *.pot
 
-*.jpg
-*.png
 *.pyc
 
 # Sphinx documentation
