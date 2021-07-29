@@ -112,7 +112,7 @@ Go to http://localhost:8000/ in your browser, and you should see the text `“He
 
 Please follow the instructions here: [creating-an-admin-user](https://docs.djangoproject.com/en/3.2/intro/tutorial02/#creating-an-admin-user)
 
-### Providing initial style images for AI models
+### Provide initial style images for models
 
 Style images are saved in  [here](media/images/style). Run below command to insert them into database.
 ```sh
