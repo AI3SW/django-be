@@ -115,6 +115,9 @@ Please follow the instructions here: [creating-an-admin-user](https://docs.djang
 ### Provide initial style images for models
 
 Style images are saved in  [here](media/images/style). Run below command to insert them into database.
+
+<mark>!</mark> check default values and make sure other parts are aligned
+
 ```sh
 $ python manage.py loaddata fixtures/styletransfer.json
 
