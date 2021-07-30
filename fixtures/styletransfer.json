@@ -1,121 +1,121 @@
 [
-{
-    "model": "styletransfer.styleimg",
-    "pk": 1,
-    "fields": {
-        "file_path": "images/style/elf.jpg",
-        "model": 1,
-        "theme": 1,
-        "is_ref": true,
-        "ref_class": "female"
+    {
+        "model": "styletransfer.model",
+        "pk": 1,
+        "fields": {
+            "name": "stargan"
+        }
+    },
+    {
+        "model": "styletransfer.model",
+        "pk": 2,
+        "fields": {
+            "name": "simswap"
+        }
+    },
+    {
+        "model": "styletransfer.theme",
+        "pk": 1,
+        "fields": {
+            "name": "elf"
+        }
+    },
+    {
+        "model": "styletransfer.theme",
+        "pk": 2,
+        "fields": {
+            "name": "samurai"
+        }
+    },
+    {
+        "model": "styletransfer.theme",
+        "pk": 3,
+        "fields": {
+            "name": "undead"
+        }
+    },
+    {
+        "model": "styletransfer.theme",
+        "pk": 4,
+        "fields": {
+            "name": "wizard"
+        }
+    },
+    {
+        "model": "styletransfer.styleimg",
+        "pk": 1,
+        "fields": {
+            "file_path": "images/style/elf.jpg",
+            "model": 1,
+            "theme": 1,
+            "is_ref": true,
+            "ref_class": "female"
+        }
+    },
+    {
+        "model": "styletransfer.styleimg",
+        "pk": 2,
+        "fields": {
+            "file_path": "images/style/ghost.jpg",
+            "model": 1,
+            "theme": 3,
+            "is_ref": false,
+            "ref_class": "female"
+        }
+    },
+    {
+        "model": "styletransfer.styleimg",
+        "pk": 3,
+        "fields": {
+            "file_path": "images/style/wizard.jpg",
+            "model": 1,
+            "theme": 4,
+            "is_ref": true,
+            "ref_class": "male"
+        }
+    },
+    {
+        "model": "styletransfer.styleimg",
+        "pk": 4,
+        "fields": {
+            "file_path": "images/style/elf_PdDbNyi.jpg",
+            "model": 2,
+            "theme": 1,
+            "is_ref": true,
+            "ref_class": "female"
+        }
+    },
+    {
+        "model": "styletransfer.styleimg",
+        "pk": 5,
+        "fields": {
+            "file_path": "images/style/samurai.jpg",
+            "model": 2,
+            "theme": 2,
+            "is_ref": true,
+            "ref_class": "male"
+        }
+    },
+    {
+        "model": "styletransfer.styleimg",
+        "pk": 6,
+        "fields": {
+            "file_path": "images/style/undead.jpg",
+            "model": 2,
+            "theme": 3,
+            "is_ref": true,
+            "ref_class": "female"
+        }
+    },
+    {
+        "model": "styletransfer.styleimg",
+        "pk": 7,
+        "fields": {
+            "file_path": "images/style/wizard_eD6mmbn.jpg",
+            "model": 2,
+            "theme": 4,
+            "is_ref": true,
+            "ref_class": "male"
+        }
     }
-},
-{
-    "model": "styletransfer.styleimg",
-    "pk": 2,
-    "fields": {
-        "file_path": "images/style/ghost.jpg",
-        "model": 1,
-        "theme": 3,
-        "is_ref": false,
-        "ref_class": "female"
-    }
-},
-{
-    "model": "styletransfer.styleimg",
-    "pk": 3,
-    "fields": {
-        "file_path": "images/style/wizard.jpg",
-        "model": 1,
-        "theme": 4,
-        "is_ref": true,
-        "ref_class": "male"
-    }
-},
-{
-    "model": "styletransfer.styleimg",
-    "pk": 4,
-    "fields": {
-        "file_path": "images/style/elf_PdDbNyi.jpg",
-        "model": 2,
-        "theme": 1,
-        "is_ref": true,
-        "ref_class": "female"
-    }
-},
-{
-    "model": "styletransfer.styleimg",
-    "pk": 5,
-    "fields": {
-        "file_path": "images/style/samurai.jpg",
-        "model": 2,
-        "theme": 2,
-        "is_ref": true,
-        "ref_class": "male"
-    }
-},
-{
-    "model": "styletransfer.styleimg",
-    "pk": 6,
-    "fields": {
-        "file_path": "images/style/undead.jpg",
-        "model": 2,
-        "theme": 3,
-        "is_ref": true,
-        "ref_class": "female"
-    }
-},
-{
-    "model": "styletransfer.styleimg",
-    "pk": 7,
-    "fields": {
-        "file_path": "images/style/wizard_eD6mmbn.jpg",
-        "model": 2,
-        "theme": 4,
-        "is_ref": true,
-        "ref_class": "male"
-    }
-},
-{
-    "model": "styletransfer.model",
-    "pk": 1,
-    "fields": {
-        "name": "stargan"
-    }
-},
-{
-    "model": "styletransfer.model",
-    "pk": 2,
-    "fields": {
-        "name": "simswap"
-    }
-},
-{
-    "model": "styletransfer.theme",
-    "pk": 1,
-    "fields": {
-        "name": "elf"
-    }
-},
-{
-    "model": "styletransfer.theme",
-    "pk": 2,
-    "fields": {
-        "name": "samurai"
-    }
-},
-{
-    "model": "styletransfer.theme",
-    "pk": 3,
-    "fields": {
-        "name": "undead"
-    }
-},
-{
-    "model": "styletransfer.theme",
-    "pk": 4,
-    "fields": {
-        "name": "wizard"
-    }
-}
 ]
