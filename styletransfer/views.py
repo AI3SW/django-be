@@ -88,8 +88,7 @@ def predict(request):
                 if 'error' in response:
                     logging.error(response['error'])
                     error = json.dumps({'error': response['error']})
-                    return HttpResponse(error, content_type='application/json',
-                                        status=503)
+                    return HttpResponse(error, content_type='application/json', status=200)
 
                 image_string = response['output_img']
 
