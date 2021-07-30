@@ -50,6 +50,7 @@ def predict(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         session_id, raw_src_img, style_id = data['session_id'], data['img'], data['style_id']
+        logging.info(f"Predicting style_id: {style_id} for session id: {session_id}")
         
         if connect_to_db:
             storeImageIntoDB(InputImg, raw_src_img)
