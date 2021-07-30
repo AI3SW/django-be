@@ -112,6 +112,18 @@ Go to http://localhost:8000/ in your browser, and you should see the text `“He
 
 Please follow the instructions here: [creating-an-admin-user](https://docs.djangoproject.com/en/3.2/intro/tutorial02/#creating-an-admin-user)
 
+### Provide initial style images for models
+
+Style images are saved in [here](media/images/style) and their attributes in [here](fixtures/styletransfer.json) . Run below command to insert them into database.
+
+<mark>!</mark> check default values and make sure other parts are aligned
+
+```sh
+$ python manage.py loaddata fixtures/styletransfer.json
+
+Installed 13 object(s) from 1 fixture(s)
+```
+
 ## Run Demo
 
 Serveral demo pages are avaliable for different AI models
