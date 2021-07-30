@@ -82,24 +82,28 @@ def predict(request):
 
         with requests.Session() as s:
             try:
-                r = s.post(url = targetURL, data = json_data, headers = headers)
+                response = s.post(url=targetURL, data=json_data,
+                                  headers=headers).json()
 
-                pic = BytesIO()
-                image_string = r.json()['output_img']
+                if 'error' in response:
+                    logging.error(response['error'])
+                    error = json.dumps({'error': response['error']})
+                    return HttpResponse(error, content_type='application/json',
+                                        status=503)
+
+                image_string = response['output_img']
 
                 if connect_to_db:
                     storeImageIntoDB(OutputImg, image_string)
-                
+
                 response = json.dumps({"output_img": image_string})
 
-                return HttpResponse(response, content_type='application/json'
-                                    ,status=200)
+                return HttpResponse(response, content_type='application/json', status=200)
             except Exception as e:
                 logging.error(e)
                 error = json.dumps({"Error": str(e)})
 
-                return HttpResponse(error, content_type='application/json'
-                                    ,status=503)
+                return HttpResponse(error, content_type='application/json', status=503)
 
 @csrf_exempt
 def predict_stargan_demo(request):
