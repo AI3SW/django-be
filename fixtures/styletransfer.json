@@ -45,7 +45,7 @@
         "model": "styletransfer.styleimg",
         "pk": 1,
         "fields": {
-            "file_path": "images/style/elf.jpg",
+            "file_path": "stargan/elf.jpg",
             "model": 1,
             "theme": 1,
             "is_ref": true,
@@ -56,7 +56,18 @@
         "model": "styletransfer.styleimg",
         "pk": 2,
         "fields": {
-            "file_path": "images/style/ghost.jpg",
+            "file_path": "stargan/samurai.jpg",
+            "model": 1,
+            "theme": 2,
+            "is_ref": true,
+            "ref_class": "male"
+        }
+    },
+    {
+        "model": "styletransfer.styleimg",
+        "pk": 3,
+        "fields": {
+            "file_path": "stargan/undead.jpg",
             "model": 1,
             "theme": 3,
             "is_ref": false,
@@ -65,9 +76,9 @@
     },
     {
         "model": "styletransfer.styleimg",
-        "pk": 3,
+        "pk": 4,
         "fields": {
-            "file_path": "images/style/wizard.jpg",
+            "file_path": "stargan/wizard.jpg",
             "model": 1,
             "theme": 4,
             "is_ref": true,
@@ -76,9 +87,9 @@
     },
     {
         "model": "styletransfer.styleimg",
-        "pk": 4,
+        "pk": 5,
         "fields": {
-            "file_path": "images/style/elf_PdDbNyi.jpg",
+            "file_path": "simswap/elf.jpg",
             "model": 2,
             "theme": 1,
             "is_ref": true,
@@ -87,9 +98,9 @@
     },
     {
         "model": "styletransfer.styleimg",
-        "pk": 5,
+        "pk": 6,
         "fields": {
-            "file_path": "images/style/samurai.jpg",
+            "file_path": "simswap/samurai.jpg",
             "model": 2,
             "theme": 2,
             "is_ref": true,
@@ -98,9 +109,9 @@
     },
     {
         "model": "styletransfer.styleimg",
-        "pk": 6,
+        "pk": 7,
         "fields": {
-            "file_path": "images/style/undead.jpg",
+            "file_path": "simswap/undead.jpg",
             "model": 2,
             "theme": 3,
             "is_ref": true,
@@ -109,9 +120,9 @@
     },
     {
         "model": "styletransfer.styleimg",
-        "pk": 7,
+        "pk": 8,
         "fields": {
-            "file_path": "images/style/wizard_eD6mmbn.jpg",
+            "file_path": "simswap/wizard.jpg",
             "model": 2,
             "theme": 4,
             "is_ref": true,
