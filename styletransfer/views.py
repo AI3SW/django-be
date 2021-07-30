@@ -1,21 +1,21 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.conf import settings
-from django.utils import timezone
-
 import base64
 import json
-import requests
-
-from PIL import Image
+import logging
+import pathlib
 from io import BytesIO
 
-from .forms import *
-from .utils import *
-from .models import *
+import requests
+from django.conf import settings
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, render
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 
-import pathlib
+from .forms import *
+from .models import *
+from .utils import *
+
+logger = logging.getLogger(__name__)
 
 dirname = pathlib.Path(__file__).resolve().parent
 
@@ -50,6 +50,7 @@ def predict(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         session_id, raw_src_img, style_id = data['session_id'], data['img'], data['style_id']
+        logging.info(f"Predicting style_id: {style_id} for session id: {session_id}")
         
         if connect_to_db:
             storeImageIntoDB(InputImg, raw_src_img)
@@ -73,7 +74,6 @@ def predict(request):
             return HttpResponse(error, content_type='application/json'
                                 ,status=503)
 
-        #print(msg)
         json_data = json.dumps(msg)
         headers = {'content-type': 'application/json'}
 
@@ -82,24 +82,27 @@ def predict(request):
 
         with requests.Session() as s:
             try:
-                r = s.post(url = targetURL, data = json_data, headers = headers)
+                response = s.post(url=targetURL, data=json_data,
+                                  headers=headers).json()
 
-                pic = BytesIO()
-                image_string = r.json()['output_img']
+                if 'error' in response:
+                    logging.error(response['error'])
+                    error = json.dumps({'error': response['error']})
+                    return HttpResponse(error, content_type='application/json', status=200)
+
+                image_string = response['output_img']
 
                 if connect_to_db:
                     storeImageIntoDB(OutputImg, image_string)
-                
+
                 response = json.dumps({"output_img": image_string})
 
-                return HttpResponse(response, content_type='application/json'
-                                    ,status=200)
+                return HttpResponse(response, content_type='application/json', status=200)
             except Exception as e:
-                print(e)
+                logging.error(e)
                 error = json.dumps({"Error": str(e)})
 
-                return HttpResponse(error, content_type='application/json'
-                                    ,status=503)
+                return HttpResponse(error, content_type='application/json', status=503)
 
 @csrf_exempt
 def predict_stargan_demo(request):
@@ -116,7 +119,6 @@ def predict_stargan_demo(request):
                 new_src_img = InputImg(file_path = src, create_date = timezone.now())
                 new_src_img.save()
 
-            #print(type(src_img.file))
             img_bytes = base64.b64encode(src.file.getvalue())
             src_img = img_bytes.decode("utf-8")
             # return redirect('success')
@@ -148,7 +150,7 @@ def predict_stargan_demo(request):
                         storeImageIntoDB(OutputImg, image_string)
 
                 except Exception as e:
-                    print('Error: ', e)
+                    logging.error(e)
 
     else:
         form = SrcImgForm()
@@ -158,7 +160,6 @@ def predict_stargan_demo(request):
     style_img_list = StyleImg.objects.all().filter(model__name = 'stargan')
     
     for style_img in style_img_list:
-        # print('title: ', style_img.image_name)
         item = {'title':style_img.image_theme(), 'path':style_img.file_path}
         references.append(item)
 
@@ -207,7 +208,7 @@ def predict_simswap_demo(request):
                         storeImageIntoDB(OutputImg, image_string)
 
                 except Exception as e:
-                    print('Error: ', e)
+                    logging.error(e)
 
     else:
         form = SimSwapForm()
@@ -258,7 +259,7 @@ def predict_all_demo(request):
                 
                 else:
                     e = "Unsupported model"
-                    print('Error: ', e)
+                    logging.error(e)
                     continue
 
                 json_data = json.dumps(msg)
@@ -278,7 +279,7 @@ def predict_all_demo(request):
                             storeImageIntoDB(OutputImg, image_string)
 
                     except Exception as e:
-                        print('Error: ', e)
+                        logging.error(e)
 
     else:
         form = AllTransferForm()

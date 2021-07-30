@@ -17,7 +17,6 @@ class StyleImgChoiceField(ModelChoiceField):
 
 class SrcImgForm(forms.Form):
     
-    # print(CHOICES)
     src_img = forms.ImageField(label='Source Image')
     selection = StyleImgChoiceField(queryset = StyleImg.objects.all().filter(model__name = 'stargan') )
 
