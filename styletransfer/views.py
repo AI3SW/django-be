@@ -6,7 +6,7 @@ from io import BytesIO
 
 import requests
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
@@ -55,7 +55,12 @@ def predict(request):
         if connect_to_db:
             storeImageIntoDB(InputImg, raw_src_img)
 
-        style_img = get_object_or_404(StyleImg, pk=int(style_id))
+        try:
+            style_img = get_object_or_404(StyleImg, pk=int(style_id))
+        except Http404 as e:
+            logging.error(e)
+            raise(e)
+
         ref = image_to_base64(style_img.file_path)
 
         if not style_img.is_ref:
