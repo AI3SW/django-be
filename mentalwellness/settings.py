@@ -21,13 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'e2vf#vrkzu2t8cv27w=7d_t5mm-qc=^jvxsh#b9*g5(19heg6o'
+SECRET_KEY = '<SECRET_KEY>'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.2.119.9', '127.0.0.1',
-                 '10.2.117.32', '10.2.0.26', '.localhost', '[::1]']
+ALLOWED_HOSTS = ['127.0.0.1',
+                 '.localhost', '[::1]']
 
 # Application definition
 
@@ -86,21 +86,12 @@ DATABASES = {
     # postgres
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ai_3_staging',
+        'NAME': '<DB_NAME>',
         'USER': 'postgres',
-        'PASSWORD': 'password',
+        'PASSWORD': '<DB_PASSWORD>',
         'HOST': 'localhost',
         'PORT': '5432',
     },
-
-    # 'postgres2': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'ai_3_staging',
-    #     'USER': 'postgres',
-    #     'PASSWORD': 'password',
-    #     'HOST': '10.2.117.32',
-    #     'PORT': '5432',
-    # }
 }
 
 
@@ -154,14 +145,14 @@ MEDIA_URL = '/media/'
 
 PREDICTION_MODEL_URL = {
     'stargan': {
-        'HOST': 'http://10.2.0.26',
-        'PORT': '5000',
-        'ENDPOINT': 'predict'
+        'HOST': '<STARGAN_IP>',
+        'PORT': '<STARGAN_PORT>',
+        'ENDPOINT': '<STARGAN_ENDPOINT>'
     },
     'simswap': {
-        'HOST': 'http://10.2.0.26',
-        'PORT': '5001',
-        'ENDPOINT': 'predict'
+        'HOST': '<SIMSWAP_IP>',
+        'PORT': '<SIMSWAP_PORT>',
+        'ENDPOINT': '<SIMSWAP_ENDPOINT>'
     }
 }
 

@@ -1,12 +1,12 @@
-# AI3SW django-be
-Django backend service for Fantacy Mentalwellness project
+# wellness_django
+Django backend service for Mental Wellness project
 
 ## Setup
 ### Clone the repository:
 
 ```sh
-$ git clone https://github.com/AI3SW/django-be.git
-$ cd django-be
+$ git clone git@github.com:AI3SW/wellness_django.git
+$ cd wellness_django
 ```
 
 ### Python Environment Management using Conda
